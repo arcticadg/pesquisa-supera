@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pesquisa de Satisfação – Supera Ipatinga</title>
+  <style>
+    :root {
+      --primary:    #f47920;        /* laranja Supera */
+      --primary-dk: #d9650f;        /* laranja escuro – hover/ativo */
+      --primary-lt: #fff0e6;        /* laranja claro – fundo selecionado */
+      --primary-xs: rgba(244,121,32,0.12); /* sombra/borda suave */
+      --bg:    #f5f5f5;
+      --white: #ffffff;
+      --text:  #2b2b2b;             /* cinza escuro principal */
+      --muted: #6b6b6b;             /* cinza médio */
+      --border: rgba(244,121,32,0.22);
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(244,121,32,0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: var(--white);
+      border-bottom: 3px solid var(--primary);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .site-header img.logo {
+      height: 64px;
+      width: auto;
+      display: block;
+    }
+
+    .site-header .tagline {
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      flex: 1;
+      padding: 36px 16px 48px;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .page-title h1 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.3;
+    }
+
+    .page-title p {
+      font-size: 0.93rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .accent-bar {
+      width: 56px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
+      margin: 10px auto 0;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      background: var(--primary);
+      color: rgba(255,255,255,0.9);
+      padding: 32px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+
+    /* logo vazada: inverte para branco sobre fundo laranja */
+    .site-footer img.logo {
+      height: 52px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
+    }
+
+    .site-footer .footer-divider {
+      width: 40px;
+      height: 2px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 2px;
+    }
+
+    .site-footer .footer-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .site-footer .footer-info span {
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .site-footer .footer-info span svg {
+      width: 15px;
+      height: 15px;
+      fill: rgba(255,255,255,0.7);
+      flex-shrink: 0;
+    }
+
+    .site-footer .copyright {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.35);
+      margin-top: 4px;
+    }
+
+    .section {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 28px 28px 22px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary);
+      border-left: 4px solid var(--primary);
+      padding-left: 10px;
+      margin-bottom: 22px;
+    }
+
+    .question {
+      margin-bottom: 26px;
+    }
+
+    .question:last-child {
+      margin-bottom: 0;
+    }
+
+    .question label.q-label {
+      display: block;
+      font-size: 0.97rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+
+    .question label.q-label span.num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 0.72rem;
+      font-weight: 800;
+      margin-right: 8px;
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
+
+    /* NPS Scale */
+    .nps-scale {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .nps-scale input[type="radio"] { display: none; }
+
+    .nps-scale label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      color: var(--muted);
+      user-select: none;
+    }
+
+    .nps-scale input[type="radio"]:checked + label {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 8px var(--primary-xs);
+    }
+
+    .nps-scale label:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .nps-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* Radio options */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .options.inline {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .options input[type="radio"] { display: none; }
+
+    .options label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.18s;
+      color: var(--text);
+      user-select: none;
+      background: var(--bg);
+    }
+
+    .options label::before {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(244,121,32,0.3);
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: all 0.18s;
+      background: #fff;
+    }
+
+    .options input[type="radio"]:checked + label {
+      border-color: var(--primary);
+      background: var(--primary-lt);
+      color: var(--primary-dk);
+      font-weight: 600;
+    }
+
+    .options input[type="radio"]:checked + label::before {
+      border-color: var(--primary);
+      background: var(--primary);
+      box-shadow: inset 0 0 0 3px #fff;
+    }
+
+    .options label:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Rating stars / cards for "Percepção de Valor" */
+    .rating-cards {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .rating-cards input[type="radio"] { display: none; }
+
+    .rating-cards label {
+      flex: 1;
+      min-width: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 10px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.18s;
+      color: var(--muted);
+      background: var(--bg);
+      user-select: none;
+      gap: 6px;
+    }
+
+    .rating-cards label .rc-icon {
+      font-size: 1.5rem;
+    }
+
+    .rating-cards input[type="radio"]:checked + label {
+      border-color: var(--primary);
+      background: var(--primary-lt);
+      color: var(--primary-dk);
+      box-shadow: 0 2px 8px var(--primary-xs);
+    }
+
+    .rating-cards label:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Textarea */
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg);
+      resize: vertical;
+      transition: border-color 0.18s;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px var(--primary-xs);
+    }
+
+    textarea::placeholder {
+      color: var(--muted);
+    }
+
+    /* Submit */
+    .submit-area {
+      text-align: center;
+      margin-top: 28px;
+    }
+
+    button[type="submit"] {
+      background: var(--primary);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 16px 48px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
+      box-shadow: 0 4px 16px rgba(244,121,32,0.35);
+    }
+
+    button[type="submit"]:hover {
+      background: var(--primary-dk);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(244,121,32,0.45);
+    }
+
+    button[type="submit"]:active {
+      transform: translateY(0);
+    }
+
+    .privacy-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 14px;
+    }
+
+    /* Success message */
+    #success-msg {
+      display: none;
+      background: #ecfdf5;
+      border: 2px solid #10b981;
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #success-msg h2 {
+      color: #065f46;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    #success-msg p {
+      color: #047857;
+      font-size: 0.95rem;
+    }
+
+    .required-indicator {
+      color: var(--primary);
+      margin-left: 2px;
+    }
+
+    @media (max-width: 480px) {
+      .section { padding: 22px 16px 18px; }
+      .nps-scale label { width: 38px; height: 38px; }
+      .rating-cards label { min-width: 70px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <img class="logo" src="supera_logo.svg" alt="Supera Ipatinga" />
+  </header>
+
+  <!-- MAIN -->
+  <main>
+  <div class="container">
+
+    <div class="page-title">
+      <h1>Pesquisa de Satisfação</h1>
+      <p>Sua opinião é muito importante para nós. Leva menos de 2 minutos!</p>
+      <div class="accent-bar"></div>
+    </div>
+
+    <form id="survey-form" novalidate>
+
+      <!-- SEÇÃO 1: Experiência Geral -->
+      <div class="section">
+        <div class="section-title">Experiência Geral</div>
+
+        <div class="question">
+          <label class="q-label">
+            <span class="num">1</span>
+            De 0 a 10, qual sua satisfação geral com o Supera Ipatinga?
+            <span class="required-indicator">*</span>
+          </label>
+          <div class="nps-scale" id="nps-group">
+            <input type="radio" name="satisfacao_geral" id="nps0" value="0"><label for="nps0">0</label>
+            <input type="radio" name="satisfacao_geral" id="nps1" value="1"><label for="nps1">1</label>
+            <input type="radio" name="satisfacao_geral" id="nps2" value="2"><label for="nps2">2</label>
+            <input type="radio" name="satisfacao_geral" id="nps3" value="3"><label for="nps3">3</label>
+            <input type="radio" name="satisfacao_geral" id="nps4" value="4"><label for="nps4">4</label>
+            <input type="radio" name="satisfacao_geral" id="nps5" value="5"><label for="nps5">5</label>
+            <input type="radio" name="satisfacao_geral" id="nps6" value="6"><label for="nps6">6</label>
+            <input type="radio" name="satisfacao_geral" id="nps7" value="7"><label for="nps7">7</label>
+            <input type="radio" name="satisfacao_geral" id="nps8" value="8"><label for="nps8">8</label>
+            <input type="radio" name="satisfacao_geral" id="nps9" value="9"><label for="nps9">9</label>
+            <input type="radio" name="satisfacao_geral" id="nps10" value="10"><label for="nps10">10</label>
+          </div>
+          <div class="nps-labels">
+            <span>Muito insatisfeito</span>
+            <span>Muito satisfeito</span>
+          </div>
+        </div>
+
+        <div class="question">
+          <label class="q-label">
+            <span class="num">2</span>
+            Você indicaria o Supera para amigos ou familiares?
+            <span class="required-indicator">*</span>
+          </label>
+          <div class="options inline">
+            <input type="radio" name="indicaria" id="ind_sim" value="Sim">
+            <label for="ind_sim">Sim</label>
+
+            <input type="radio" name="indicaria" id="ind_talvez" value="Talvez">
+            <label for="ind_talvez">Talvez</label>
+
+            <input type="radio" name="indicaria" id="ind_nao" value="Não">
+            <label for="ind_nao">Não</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 2: Metodologia e Professor -->
+      <div class="section">
+        <div class="section-title">Metodologia e Professor</div>
+
+        <div class="question">
+          <label class="q-label">
+            <span class="num">3</span>
+            Você percebe evolução após iniciar as aulas?
+            <span class="required-indicator">*</span>
+          </label>
+          <div class="options inline">
+            <input type="radio" name="evolucao" id="evo_sim" value="Sim">
+            <label for="evo_sim">Sim</label>
+
+            <input type="radio" name="evolucao" id="evo_parc" value="Parcialmente">
+            <label for="evo_parc">Parcialmente</label>
+
+            <input type="radio" name="evolucao" id="evo_nao" value="Não">
+            <label for="evo_nao">Não</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <label class="q-label">
+            <span class="num">4</span>
+            O professor demonstra preparo e motivação?
+            <span class="required-indicator">*</span>
+          </label>
+          <div class="options">
+            <input type="radio" name="professor" id="prof_exc" value="Excelente">
+            <label for="prof_exc">Excelente</label>
+
+            <input type="radio" name="professor" id="prof_bom" value="Bom">
+            <label for="prof_bom">Bom</label>
+
+            <input type="radio" name="professor" id="prof_reg" value="Regular">
+            <label for="prof_reg">Regular</label>
+
+            <input type="radio" name="professor" id="prof_mel" value="Precisa melhorar">
+            <label for="prof_mel">Precisa melhorar</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 3: Atendimento -->
+      <div class="section">
+        <div class="section-title">Atendimento</div>
+
+        <div class="question">
+          <label class="q-label">
+            <span class="num">5</span>
+            Como você avalia o atendimento da equipe (recepção + secretaria)?
+            <span class="required-indicator">*</span>
+          </label>
+          <div class="options">
+            <input type="radio" name="atendimento" id="atd_exc" value="Excelente">
+            <label for="atd_exc">Excelente</label>
+
+            <input type="radio" name="atendimento" id="atd_bom" value="Bom">
+            <label for="atd_bom">Bom</label>
+
+            <input type="radio" name="atendimento" id="atd_reg" value="Regular">
+            <label for="atd_reg">Regular</label>
+
+            <input type="radio" name="atendimento" id="atd_mel" value="Precisa melhorar">
+            <label for="atd_mel">Precisa melhorar</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 4: Estrutura -->
+      <div class="section">
+        <div class="section-title">Estrutura</div>
+
+        <div class="question">
+          <label class="q-label">
+            <span class="num">6</span>
+            O ambiente é limpo, organizado e confortável?
+            <span class="required-indicator">*</span>
+          </label>
+          <div class="options inline">
+            <input type="radio" name="ambiente" id="amb_sim" value="Sim">
+            <label for="amb_sim">Sim</label>
+
+            <input type="radio" name="ambiente" id="amb_parc" value="Parcialmente">
+            <label for="amb_parc">Parcialmente</label>
+
+            <input type="radio" name="ambiente" id="amb_nao" value="Não">
+            <label for="amb_nao">Não</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 5: Percepção de Valor -->
+      <div class="section">
+        <div class="section-title">Percepção de Valor</div>
+
+        <div class="question">
+          <label class="q-label">
+            <span class="num">7</span>
+            Avalie: metodologia, roteiros de aulas, atividades de neuróbica e material didático pedagógico.
+            <span class="required-indicator">*</span>
+          </label>
+          <div class="rating-cards">
+            <input type="radio" name="valor" id="val_exc" value="Excelente">
+            <label for="val_exc">
+              <span class="rc-icon">⭐</span>
+              Excelente
+            </label>
+
+            <input type="radio" name="valor" id="val_bom" value="Bom">
+            <label for="val_bom">
+              <span class="rc-icon">👍</span>
+              Bom
+            </label>
+
+            <input type="radio" name="valor" id="val_reg" value="Regular">
+            <label for="val_reg">
+              <span class="rc-icon">😐</span>
+              Regular
+            </label>
+
+            <input type="radio" name="valor" id="val_mel" value="Precisa melhorar">
+            <label for="val_mel">
+              <span class="rc-icon">📈</span>
+              Precisa melhorar
+            </label>
+          </div>
+        </div>
+
+        <div class="question">
+          <label class="q-label" for="melhorias">
+            <span class="num">8</span>
+            O que podemos melhorar?
+          </label>
+          <textarea
+            id="melhorias"
+            name="melhorias"
+            placeholder="Compartilhe suas sugestões ou comentários..."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="submit-area">
+        <button type="submit">Enviar Respostas</button>
+        <p class="privacy-note">Suas respostas são confidenciais e nos ajudam a melhorar.</p>
+      </div>
+    </form>
+
+    <div id="success-msg">
+      <h2>Obrigado pelo seu feedback! 🎉</h2>
+      <p>Suas respostas foram registradas. A equipe Supera Ipatinga agradece sua participação!</p>
+    </div>
+  </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <img class="logo" src="supera_logo.svg" alt="Supera Ipatinga" />
+    <div class="footer-divider"></div>
+    <div class="footer-info">
+      <span>
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+        </svg>
+        R. Finlândia, 17 - Cariru, Ipatinga - MG, 35160-147
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        </svg>
+        (31) 99955-2700
+      </span>
+    </div>
+    <span class="copyright">© 2026 Supera Ipatinga. Todos os direitos reservados.</span>
+  </footer>
+
+  <script src="config.js"></script>
+  <script>
+    const form       = document.getElementById('survey-form');
+    const successMsg = document.getElementById('success-msg');
+    const STORAGE_KEY = 'supera_respostas';
+
+    const requiredFields = [
+      { name: 'satisfacao_geral', label: 'satisfação geral (0–10)' },
+      { name: 'indicaria',        label: 'indicação do Supera' },
+      { name: 'evolucao',         label: 'percepção de evolução' },
+      { name: 'professor',        label: 'avaliação do professor' },
+      { name: 'atendimento',      label: 'avaliação do atendimento' },
+      { name: 'ambiente',         label: 'avaliação do ambiente' },
+      { name: 'valor',            label: 'percepção de valor' },
+    ];
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const missing = requiredFields.filter(f => !form.querySelector(`input[name="${f.name}"]:checked`));
+      if (missing.length > 0) {
+        alert('Por favor, responda os campos obrigatórios:\n• ' + missing.map(f => f.label).join('\n• '));
+        return;
+      }
+
+      // Coletar dados
+      const data = {};
+      requiredFields.forEach(f => {
+        data[f.name] = form.querySelector(`input[name="${f.name}"]:checked`).value;
+      });
+      data.melhorias = document.getElementById('melhorias').value;
+      data.data_hora = new Date().toLocaleString('pt-BR');
+      data.id = crypto.randomUUID();
+
+      // 1) Salvar no localStorage (backup offline)
+      const respostas = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      respostas.push(data);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(respostas));
+
+      // 2) Enviar ao N8N
+      const url = (typeof SUPERA_CONFIG !== 'undefined') && SUPERA_CONFIG.webhookEnvio;
+      if (url) {
+        fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        }).catch(function() { /* silencia erros de rede; localStorage já tem backup */ });
+      }
+
+      // Mostrar mensagem de sucesso
+      form.style.display = 'none';
+      successMsg.style.display = 'block';
+      successMsg.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

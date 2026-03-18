@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin – Supera Ipatinga</title>
+  <style>
+    :root {
+      --primary:    #f47920;
+      --primary-dk: #d9650f;
+      --primary-lt: #fff0e6;
+      --primary-xs: rgba(244,121,32,0.12);
+      --bg:    #f5f5f5;
+      --white: #ffffff;
+      --text:  #2b2b2b;
+      --muted: #6b6b6b;
+      --border: rgba(244,121,32,0.22);
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(244,121,32,0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: var(--white);
+      border-bottom: 3px solid var(--primary);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .site-header img.logo {
+      height: 56px;
+      width: auto;
+    }
+
+    /* ── MAIN ── */
+    main { flex: 1; padding: 40px 16px 48px; }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      gap: 0;
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 40px 36px 32px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    .login-card .lock-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--primary-lt);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+    }
+
+    .login-card .lock-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--primary);
+    }
+
+    .login-card h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .login-card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .login-card input[type="password"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      margin-bottom: 14px;
+    }
+
+    .login-card input[type="password"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-xs);
+      background: #fff;
+    }
+
+    .login-card button {
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      padding: 13px;
+      cursor: pointer;
+      transition: background 0.18s, box-shadow 0.18s;
+      box-shadow: 0 4px 14px rgba(244,121,32,0.30);
+    }
+
+    .login-card button:hover {
+      background: var(--primary-dk);
+      box-shadow: 0 6px 18px rgba(244,121,32,0.40);
+    }
+
+    .login-error {
+      margin-top: 12px;
+      font-size: 0.82rem;
+      color: #c0392b;
+      display: none;
+    }
+
+    /* ── ADMIN PANEL ── */
+    #admin-screen { display: none; }
+
+    .admin-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .admin-topbar h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .admin-topbar .badge {
+      background: var(--primary-lt);
+      color: var(--primary-dk);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(244,121,32,0.25);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.18s;
+    }
+
+    .btn svg { width: 15px; height: 15px; }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(244,121,32,0.30);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dk);
+      box-shadow: 0 4px 14px rgba(244,121,32,0.40);
+    }
+
+    .btn-primary svg { fill: #fff; }
+
+    .btn-ghost {
+      background: var(--white);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      color: #c0392b;
+      border-color: rgba(192,57,43,0.3);
+      background: #fff5f5;
+    }
+
+    .btn-ghost svg { fill: currentColor; }
+
+    .btn-logout {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-logout:hover { color: var(--text); border-color: var(--muted); }
+    .btn-logout svg { fill: currentColor; }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 16px 18px;
+      text-align: center;
+    }
+
+    .stat-card .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    /* Table */
+    .table-wrap {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+    }
+
+    thead tr {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    thead th {
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(244,121,32,0.08);
+      transition: background 0.12s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--primary-lt); }
+
+    tbody td {
+      padding: 11px 14px;
+      color: var(--text);
+      vertical-align: top;
+    }
+
+    tbody td.muted { color: var(--muted); font-size: 0.78rem; }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .pill-green  { background: #ecfdf5; color: #065f46; }
+    .pill-yellow { background: #fffbeb; color: #92400e; }
+    .pill-red    { background: #fef2f2; color: #991b1b; }
+    .pill-orange { background: var(--primary-lt); color: var(--primary-dk); }
+
+    .nps-score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .nps-promoter  { background: #ecfdf5; color: #065f46; }
+    .nps-passive   { background: #fffbeb; color: #92400e; }
+    .nps-detractor { background: #fef2f2; color: #991b1b; }
+
+    .empty-state {
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty-state svg {
+      width: 40px; height: 40px;
+      fill: rgba(244,121,32,0.25);
+      margin-bottom: 12px;
+    }
+
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      background: var(--primary);
+      color: rgba(255,255,255,0.9);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .site-footer img.logo {
+      height: 40px;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+    }
+
+    .site-footer .copyright {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    @media (max-width: 600px) {
+      .admin-topbar { flex-direction: column; align-items: flex-start; }
+      .login-card { padding: 28px 20px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <img class="logo" src="supera_logo.svg" alt="Supera Ipatinga" />
+  </header>
+
+  <main>
+  <div class="container">
+
+    <!-- LOGIN -->
+    <div id="login-screen">
+      <div class="login-card">
+        <div class="lock-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        </div>
+        <h2>Área Administrativa</h2>
+        <p>Digite a senha para acessar as respostas</p>
+        <input type="password" id="senha-input" placeholder="Senha" />
+        <button onclick="fazerLogin()">Entrar</button>
+        <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
+      </div>
+    </div>
+
+    <!-- PAINEL ADMIN -->
+    <div id="admin-screen">
+
+      <div class="admin-topbar">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <h1>Respostas da Pesquisa</h1>
+          <span class="badge" id="total-badge">0 respostas</span>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="exportarCSV()">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Baixar CSV
+          </button>
+          <button class="btn btn-ghost" onclick="confirmarLimpeza()">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            Limpar dados
+          </button>
+          <button class="btn btn-logout" onclick="fazerLogout()">
+            <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+            Sair
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row" id="stats-row"></div>
+
+      <!-- Tabela -->
+      <div class="table-wrap">
+        <table id="tabela-respostas">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Data / Hora</th>
+              <th>Satisfação</th>
+              <th>Indicaria</th>
+              <th>Evolução</th>
+              <th>Professor</th>
+              <th>Atendimento</th>
+              <th>Ambiente</th>
+              <th>Valor/Metodologia</th>
+              <th>Sugestões</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-body"></tbody>
+        </table>
+        <div class="empty-state" id="empty-state" style="display:none;">
+          <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.35C18 2.53 15.47 0 12.35 0c-1.7 0-3.21.9-4.1 2.26L7 3.5l-1.25-1.24C4.97 1.48 4.12 1 3.18 1 1.42 1 0 2.42 0 4.18c0 1 .46 1.91 1.18 2.5L8 12.5V20c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2v-2.5l5-4.95V8c0-1.1-.9-2-2-2z"/></svg>
+          <p>Nenhuma resposta registrada ainda.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </main>
+
+  <footer class="site-footer">
+    <img class="logo" src="supera_logo.svg" alt="Supera Ipatinga" />
+    <span class="copyright">© 2026 Supera Ipatinga · Painel Administrativo</span>
+  </footer>
+
+  <script src="config.js"></script>
+  <script>
+    const SENHA       = (typeof SUPERA_CONFIG !== 'undefined') ? SUPERA_CONFIG.ADMIN_SENHA : 'supera@2026';
+    const STORAGE_KEY = 'supera_respostas';
+    const SESSION_KEY = 'supera_admin_ok';
+
+    // Cache das respostas carregadas (Sheets ou localStorage)
+    let _respostas = [];
+
+    // ── Verificar sessão ao carregar ──
+    if (sessionStorage.getItem(SESSION_KEY) === '1') mostrarPainel();
+
+    document.getElementById('senha-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') fazerLogin();
+    });
+
+    function fazerLogin() {
+      const val = document.getElementById('senha-input').value;
+      if (val === SENHA) {
+        sessionStorage.setItem(SESSION_KEY, '1');
+        mostrarPainel();
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+        document.getElementById('senha-input').value = '';
+        document.getElementById('senha-input').focus();
+      }
+    }
+
+    function fazerLogout() {
+      sessionStorage.removeItem(SESSION_KEY);
+      location.reload();
+    }
+
+    function mostrarPainel() {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-screen').style.display = 'block';
+      carregarRespostas();
+    }
+
+    // ── Carregar respostas: N8N GET > localStorage ─────────────
+    function carregarRespostas() {
+      const getUrl = (typeof SUPERA_CONFIG !== 'undefined') && SUPERA_CONFIG.webhookLeitura;
+
+      if (getUrl) {
+        document.getElementById('total-badge').textContent = 'carregando…';
+
+        fetch(getUrl)
+          .then(r => r.json())
+          .then(dados => {
+            if (Array.isArray(dados)) {
+              _respostas = dados;
+              renderizarTabela(_respostas);
+            } else {
+              throw new Error('Formato inesperado');
+            }
+          })
+          .catch(() => {
+            // Fallback: localStorage
+            _respostas = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').reverse();
+            renderizarTabela(_respostas);
+          });
+      } else {
+        // GET do N8N ainda não configurado: usa localStorage
+        _respostas = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').reverse();
+        renderizarTabela(_respostas);
+      }
+    }
+
+    // ── Renderizar tabela e stats ──────────────────────────────
+    function renderizarTabela(respostas) {
+      const badge = document.getElementById('total-badge');
+      const body  = document.getElementById('tabela-body');
+      const empty = document.getElementById('empty-state');
+
+      badge.textContent = respostas.length + (respostas.length === 1 ? ' resposta' : ' respostas');
+
+      if (respostas.length === 0) {
+        empty.style.display = 'block';
+        body.innerHTML = '';
+        renderizarStats([]);
+        return;
+      }
+
+      empty.style.display = 'none';
+      renderizarStats(respostas);
+
+      body.innerHTML = respostas.map((r, i) => `
+        <tr>
+          <td class="muted">${i + 1}</td>
+          <td class="muted" style="white-space:nowrap">${r.data_hora || '—'}</td>
+          <td><span class="nps-score ${npsClass(r.satisfacao_geral)}">${r.satisfacao_geral}</span></td>
+          <td>${pill(r.indicaria)}</td>
+          <td>${pill(r.evolucao)}</td>
+          <td>${pill(r.professor)}</td>
+          <td>${pill(r.atendimento)}</td>
+          <td>${pill(r.ambiente)}</td>
+          <td>${pill(r.valor)}</td>
+          <td style="max-width:200px;color:var(--muted);font-size:0.78rem">${r.melhorias ? escHtml(r.melhorias) : '—'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderizarStats(respostas) {
+      const total = respostas.length;
+      const mediaNPS = total
+        ? (respostas.reduce((s, r) => s + Number(r.satisfacao_geral), 0) / total).toFixed(1)
+        : '—';
+      const indicariam = total
+        ? Math.round(respostas.filter(r => r.indicaria === 'Sim').length / total * 100) + '%'
+        : '—';
+      const excelentes = total
+        ? Math.round(respostas.filter(r => r.atendimento === 'Excelente').length / total * 100) + '%'
+        : '—';
+
+      document.getElementById('stats-row').innerHTML = `
+        <div class="stat-card">
+          <div class="stat-value">${total}</div>
+          <div class="stat-label">Respostas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${mediaNPS}</div>
+          <div class="stat-label">Nota média (0–10)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${indicariam}</div>
+          <div class="stat-label">Indicariam o Supera</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${excelentes}</div>
+          <div class="stat-label">Atendimento Excelente</div>
+        </div>
+      `;
+    }
+
+    // ── Helpers de visual ──────────────────────────────────────
+    function npsClass(v) {
+      const n = Number(v);
+      if (n >= 9) return 'nps-promoter';
+      if (n >= 7) return 'nps-passive';
+      return 'nps-detractor';
+    }
+
+    function pill(v) {
+      if (!v || v === 'undefined') return '—';
+      if (v === 'Sim' || v === 'Excelente') return `<span class="pill pill-green">${v}</span>`;
+      if (v === 'Talvez' || v === 'Parcialmente' || v === 'Bom') return `<span class="pill pill-yellow">${v}</span>`;
+      if (v === 'Não') return `<span class="pill pill-red">${v}</span>`;
+      return `<span class="pill pill-orange">${v}</span>`;
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // ── Exportar CSV ───────────────────────────────────────────
+    function exportarCSV() {
+      if (_respostas.length === 0) { alert('Não há respostas para exportar.'); return; }
+
+      const cabecalho = [
+        'Data/Hora', 'Satisfação Geral (0-10)', 'Indicaria?',
+        'Percebe Evolução?', 'Professor', 'Atendimento',
+        'Ambiente', 'Valor/Metodologia', 'Sugestões de Melhoria'
+      ];
+
+      const linhas = _respostas.map(r => [
+        r.data_hora || '',
+        r.satisfacao_geral || '',
+        r.indicaria || '',
+        r.evolucao || '',
+        r.professor || '',
+        r.atendimento || '',
+        r.ambiente || '',
+        r.valor || '',
+        (r.melhorias || '').replace(/"/g, '""')
+      ].map(c => `"${c}"`).join(','));
+
+      const bom = '\uFEFF'; // BOM para Excel reconhecer UTF-8
+      const csv = bom + [cabecalho.map(c => `"${c}"`).join(','), ...linhas].join('\r\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = `supera_respostas_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ── Limpar dados ───────────────────────────────────────────
+    function confirmarLimpeza() {
+      const sheetUrl = (typeof SUPERA_CONFIG !== 'undefined') && SUPERA_CONFIG.webhookLeitura;
+      const aviso = sheetUrl
+        ? 'Isso vai apagar apenas os dados do localStorage deste dispositivo.\nAs respostas no Google Sheets NÃO serão apagadas.\n\nDeseja continuar?'
+        : 'Tem certeza que deseja apagar TODAS as respostas do localStorage? Esta ação não pode ser desfeita.';
+
+      if (confirm(aviso)) {
+        localStorage.removeItem(STORAGE_KEY);
+        if (!sheetUrl) {
+          _respostas = [];
+          renderizarTabela([]);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
